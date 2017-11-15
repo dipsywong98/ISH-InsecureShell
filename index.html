@@ -1,16 +1,24 @@
 <html>
 
 <head>
-  <title>USH - Unsecure Shell</title>
+  <title>ISH - Insecure Shell</title>
   <script src="vue.min.js"></script>
   <script src="jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
 </head>
 
 <body>
-  <div id="app">
-    <textarea>command here</textarea>
-    <button onclick="SendCommand()">send</button>
-    <div v-for="response in responses">
+  <div id="app" class="container">
+    <h2>ISH - Insecure Shell</h2>
+    <form>
+      <div class="input-field">
+        <input id="cmd" type="text" class="validate" />
+        <label for="cmd">command here</label>
+      </div>
+      <button class="waves-effect waves-light btn">send</button>
+    </form>
+    <div v-for="response in responses" style="margin-up:20px">
       <p v-for="line in response" style="margin:0px;padding:0px">{{line}}</p>
     </div>
   </div>
@@ -26,12 +34,22 @@
     }
   })
 
+  $('form').submit((e)=>{
+    e.preventDefault();
+    SendCommand()
+  })
+  
   var SendCommand = () => {
     $.ajax({
-      url: 'cmd.php?cmd='+ $('textarea')[0].value,
+      url: 'cmd.php?cmd=' + $('#cmd')[0].value,
       context: document.body
     }).done((response) => {
-      app.responses.unshift(JSON.parse(response));
+      try{
+      app.responses.unshift(JSON.parse(response));}
+      catch(e){
+        console.log(e)
+        app.responses.unshift([response]);
+      }
     })
   }
 
