@@ -42,7 +42,10 @@
   var SendCommand = () => {
     $.ajax({
       url: 'cmd.php?cmd=' + $('#cmd')[0].value,
-      context: document.body
+      context: document.body,
+      error: function (request, status, error) {
+        alert(error);
+    }
     }).done((response) => {
       try{
       app.responses.unshift(JSON.parse(response));}
@@ -52,6 +55,12 @@
       }
     })
   }
+  $.ajax({
+      url: 'cmd.php',
+      context: document.body,
+      error: function (request, status, error) {
+        alert(error+', cannot use this service');
+    }})
 
 </script>
 
