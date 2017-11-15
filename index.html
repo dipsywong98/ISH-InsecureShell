@@ -1,3 +1,40 @@
 <html>
+
+<head>
+  <title>USH - Unsecure Shell</title>
+  <script src="vue.min.js"></script>
+  <script src="jquery-3.2.1.min.js"></script>
+</head>
+
 <body>
-hello world
+  <div id="app">
+    <textarea>command here</textarea>
+    <button onclick="SendCommand()">send</button>
+    <div v-for="response in responses">
+      <p v-for="line in response" style="margin:0px;padding:0px">{{line}}</p>
+    </div>
+  </div>
+</body>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      responses: []
+    },
+    methods: {
+
+    }
+  })
+
+  var SendCommand = () => {
+    $.ajax({
+      url: 'cmd.php?cmd='+ $('textarea')[0].value,
+      context: document.body
+    }).done((response) => {
+      app.responses.unshift(JSON.parse(response));
+    })
+  }
+
+</script>
+
+</html>
